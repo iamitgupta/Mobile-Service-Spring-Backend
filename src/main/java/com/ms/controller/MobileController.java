@@ -141,8 +141,12 @@ public class MobileController {
 			@RequestParam(required = false) Integer rearCamera,
 			
 			@RequestParam(required = false) Integer frontCamera,
+			
+			//gte ram 2,4,6,8
 			@RequestParam(required = false) Integer ram,
+			
 			@RequestParam(required = false) Integer inbuiltMemory,
+			
 			@RequestParam(required = false) Integer battery,
 
 			// Android or iOS
@@ -165,7 +169,11 @@ public class MobileController {
 			// paging--done
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size,
 
-			// sorting--done
+			// sorting--done 
+			//date-> dateASC, dateDESC
+			//date-> priceASC, priceDESC
+			//date-> specScoreASC, specScoreDESC
+			
 			@RequestParam(defaultValue = "dateDESC") String sort
 
 	) {

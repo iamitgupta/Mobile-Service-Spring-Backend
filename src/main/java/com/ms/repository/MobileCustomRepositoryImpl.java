@@ -83,13 +83,14 @@ public class MobileCustomRepositoryImpl implements MobileCustomRepository {
 		}
 
 		// ram
+		//gte ram 2,4,6,8
 		if (ram != null) {
 			criteria.add(Criteria.where("ram").gte(ram));
 		}
 
 		// inbuiltMemorys
 		if (inbuiltMemory != null) {
-			criteria.add(Criteria.where("inbuiltMemory").gte(inbuiltMemory));
+			criteria.add(Criteria.where("internalMemory").gte(inbuiltMemory));
 		}
 
 		// battery
