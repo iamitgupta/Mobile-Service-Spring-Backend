@@ -131,11 +131,11 @@ public class MobileController {
 			// display type- amoled , ips
 			@RequestParam(required = false) String display,
 
-			// screen size
-//			  4 inch & Below
+			// screenSize
+//			  4 inch Below
 //			  4 inch - 5 inch
 //			  5 inch - 6 inch
-//			  6 inch & Above
+//			  6 inch Above
 			@RequestParam(required = false) List<String> screenSize,
 
 			@RequestParam(required = false) Integer rearCamera,

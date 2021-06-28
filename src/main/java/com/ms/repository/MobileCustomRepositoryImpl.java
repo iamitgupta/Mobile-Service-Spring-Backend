@@ -46,19 +46,19 @@ public class MobileCustomRepositoryImpl implements MobileCustomRepository {
 		// launchedDates
 
 		// screenSize
-//		  4 inch & Below
+//		  4 inch Below
 //		  4 inch - 5 inch
 //		  5 inch - 6 inch
-//		  6 inch & Above
+//		  6 inch Above
 		if (screen != null && screen.size() >= 1) {
 			for (String sc : screen) {
-				if (sc.equalsIgnoreCase("4 inch & Below")) {
+				if (sc.equalsIgnoreCase("4 inch Below")) {
 					criteria.add(Criteria.where("screenSize").lte(4));
 				} else if (sc.equalsIgnoreCase("4 inch - 5 inch")) {
 					criteria.add(Criteria.where("screenSize").gte(4).lte(5));
 				} else if (sc.equalsIgnoreCase("5 inch - 6 inch")) {
 					criteria.add(Criteria.where("screenSize").gte(5).lte(6));
-				} else if (sc.equalsIgnoreCase("6 inch & Above")) {
+				} else if (sc.equalsIgnoreCase("6 inch Above")) {
 					criteria.add(Criteria.where("screenSize").gte(6));
 				}
 			}
@@ -115,7 +115,7 @@ public class MobileCustomRepositoryImpl implements MobileCustomRepository {
 		// sort
 
 		if (!criteria.isEmpty())
-			query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
+			query.addCriteria(new Criteria().orOperator(criteria.toArray(new Criteria[criteria.size()])));
 		return mongoTemplate.find(query, Mobile.class);
 //		
 		
