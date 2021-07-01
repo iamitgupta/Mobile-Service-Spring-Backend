@@ -1,0 +1,34 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+public class Test {
+
+	public static void main(String[] args) {
+		List<Integer> list = Arrays.asList(50,70,60);
+		List<Integer> sorted = new ArrayList<Integer>(list);
+		Collections.sort(sorted,  Collections.reverseOrder());
+		
+		list.forEach(System.out::println);
+		
+		System.out.println("......");
+		
+		sorted.forEach(System.out::println);
+		
+		System.out.println("......"+sorted.get(0));
+		
+		for(int i = 0; i<list.size(); i++) {
+			for(int j=0; j<sorted.size();j++) {
+				if(list.get(i)==sorted.get(j)) {
+					System.out.println(j+1);
+				}
+			}
+			
+		}
+		
+		
+
+	}
+
+}
