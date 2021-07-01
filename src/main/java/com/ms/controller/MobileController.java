@@ -20,7 +20,7 @@ import com.ms.entity.Mobile;
 import com.ms.services.MobileService;
 
 @RestController("/api/ms")
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class MobileController {
 
 	@Autowired

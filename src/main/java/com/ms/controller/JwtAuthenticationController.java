@@ -23,7 +23,7 @@ import com.ms.entity.security.JwtResponse;
 
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class JwtAuthenticationController {
 
 	@Autowired
