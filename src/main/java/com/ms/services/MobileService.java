@@ -1,6 +1,7 @@
 package com.ms.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,21 +12,30 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.ms.dto.MobileComparison;
 import com.ms.entity.Display;
 import com.ms.entity.Mobile;
 import com.ms.repository.MobileRepository;
+import com.ms.util.MobileUtil;
 
 @Service
 public class MobileService {
 
 	@Autowired
 	private MobileRepository repository;
+	
+	@Autowired
+	private MobileUtil mobileUtil;
 
 	public Mobile saveMobile(Mobile mobile) {
 		return repository.save(mobile);
 	}
 
 	public Mobile getMobile(Long id) {
+		
+		if(id==null) {
+			return null;
+		}
 
 		Optional<Mobile> mobile = repository.findById(id);
 
@@ -95,66 +105,18 @@ public class MobileService {
 			Integer page,
 			Integer size, String sort) {
 
-		Pageable paging = PageRequest.of(page, size, getSorting(sort));
+		Pageable paging = PageRequest.of(page, size, mobileUtil.getSorting(sort));
 
 		// display
 		if (display != null) {
 			display = display.toUpperCase();
 		}
 
-		return repository.findMobileByProperties(searchString(search), brands, priceLow, priceHigh, launchedDate,
-				screenSize, display, rearCamera, frontCamera, ram, inbuiltMemory, battery, os, getCPUPattern(cpu),upcoming, paging);
+		return repository.findMobileByProperties( mobileUtil.searchString(search), brands, priceLow, priceHigh, launchedDate,
+				screenSize, display, rearCamera, frontCamera, ram, inbuiltMemory, battery, os,  mobileUtil.getCPUPattern(cpu),upcoming, paging);
 	}
 
-	private Sort getSorting(String sort) {
-		Sort sortReq = Sort.by(Sort.Direction.DESC, "releseDate");
-
-		// asc
-		if (sort.contains("ASC")) {
-
-			if (sort.contains("date")) {
-				sortReq = Sort.by(Sort.Direction.ASC, "releseDate");
-			}
-			if (sort.contains("specScore")) {
-				sortReq = Sort.by(Sort.Direction.ASC, "specScore");
-			}
-			if (sort.contains("price")) {
-				sortReq = Sort.by(Sort.Direction.ASC, "price");
-			}
-		}
-		// desc
-		else {
-			if (sort.contains("date")) {
-				sortReq = Sort.by(Sort.Direction.DESC, "releseDate");
-			}
-			if (sort.contains("specScore")) {
-				sortReq = Sort.by(Sort.Direction.DESC, "specScore");
-			}
-			if (sort.contains("price")) {
-				sortReq = Sort.by(Sort.Direction.DESC, "price");
-			}
-			if (sort.contains("popularity")) {
-				sortReq = Sort.by(Sort.Direction.DESC, "popularity");
-			}
-		}
-
-		return sortReq;
-	}
-
-	private String searchString(String str) {
-		if (str != null && !str.isEmpty()) {
-			String words[] = str.split("\\s");
-			String capitalizeWord = "";
-			for (String w : words) {
-				String first = w.substring(0, 1);
-				String afterfirst = w.substring(1);
-				capitalizeWord += first.toUpperCase() + afterfirst + " ";
-			}
-			return capitalizeWord.trim();
-		}
-		return str;
-
-	}
+	
 
 	public List<String> findByTitleContainingIgnoreCase(String title) {
 
@@ -171,19 +133,46 @@ public class MobileService {
 
 	}
 
-	public static String getCPUPattern(List<String> cpus) {
-		String pattern = "";
-		if (cpus != null && cpus.size() >= 1) {
-			for(String str : cpus) {
-				pattern = pattern+str+"|";
-			}
-			
-			//remove last or operator
-			pattern = pattern.substring(0, pattern.lastIndexOf("|"));
+	
+	//mobile comaprison
+	
+	public List<MobileComparison> getComparison(Long mobileOne, Long mobileTwo, Long mobileThree){
+		
+		List<MobileComparison> listMobile = new ArrayList<>();
+		
+		if(mobileOne!=null) {
 			
 		}
-		return pattern;
-
+		
+		Mobile mobile1 = getMobile(mobileOne);
+		Mobile mobile2 = getMobile(mobileTwo);
+		Mobile mobile3 = getMobile(mobileThree);
+		
+		List<Long> rank = null;
+		
+		if(mobile1!=null && mobile2!=null && mobile3!=null) {
+			rank =  mobileUtil.getRanking(Arrays.asList(mobile1.getSpecScore(),
+					mobile2.getSpecScore(),mobile3.getSpecScore()
+					));
+			listMobile.add(new MobileComparison(rank.get(0),mobile1));
+			listMobile.add(new MobileComparison(rank.get(1),mobile2));
+			listMobile.add(new MobileComparison(rank.get(2),mobile3));
+			
+			return listMobile;
+			
+		}else if(mobile1!=null && mobile2!=null) {
+			rank =  mobileUtil.getRanking(Arrays.asList(mobile1.getSpecScore(),
+					mobile2.getSpecScore()
+					));
+			listMobile.add(new MobileComparison(rank.get(0),mobile1));
+			listMobile.add(new MobileComparison(rank.get(1),mobile2));
+			
+			return listMobile;
+		}
+	
+		return null;
 	}
+	
+	
 
 }

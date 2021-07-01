@@ -113,7 +113,7 @@ public class MobileCustomRepositoryImpl implements MobileCustomRepository {
 			criteria.add(Criteria.where("upcoming").is(upcoming));
 		}
 
-		// sort
+	
 
 		if (!criteria.isEmpty())
 			query.addCriteria(new Criteria().orOperator(criteria.toArray(new Criteria[criteria.size()])));

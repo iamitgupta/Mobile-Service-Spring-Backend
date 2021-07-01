@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ms.dto.MobileComparison;
 import com.ms.entity.Mobile;
 import com.ms.services.MobileService;
 
@@ -177,23 +178,22 @@ public class MobileController {
 			@RequestParam(defaultValue = "dateDESC") String sort
 
 	) {
-		System.out.println("search: "+search);
-		System.out.println("Brands: "+brand);
 		
-		List<Mobile> mobileList = service.findMobileByProperties(search, brand, priceLow, priceHigh, launchedDate,
-				screenSize, display, rearCamera, frontCamera, ram, inbuiltMemory, battery, os, cpu, upcoming, page, size, sort);
-		return new ResponseEntity<>(mobileList, HttpStatus.OK);
+		
+//		List<Mobile> mobileList = service.findMobileByProperties(search, brand, priceLow, priceHigh, launchedDate,
+//				screenSize, display, rearCamera, frontCamera, ram, inbuiltMemory, battery, os, cpu, upcoming, page, size, sort);
+//		return new ResponseEntity<>(mobileList, HttpStatus.OK);
 //
-//		try {
-//			List<Mobile> mobileList = service.findMobileByProperties(search, brand, priceLow, priceHigh, launchedDate,
-//					screenSize, display, rearCamera, frontCamera, ram, inbuiltMemory, battery, os, cpu, page, size, sort);
-//			if(mobileList.size()>1)
-//				return new ResponseEntity<>(mobileList, HttpStatus.OK);
-//			return new ResponseEntity<>(mobileList, HttpStatus.NO_CONTENT);
-//			
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
+		try {
+			List<Mobile> mobileList = service.findMobileByProperties(search, brand, priceLow, priceHigh, launchedDate,
+					screenSize, display, rearCamera, frontCamera, ram, inbuiltMemory, battery, os, cpu, upcoming, page, size, sort);
+	if(mobileList.size()>1)
+				return new ResponseEntity<>(mobileList, HttpStatus.OK);
+			return new ResponseEntity<>(mobileList, HttpStatus.NO_CONTENT);
+			
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@GetMapping("/suggestion")
@@ -202,7 +202,7 @@ public class MobileController {
 			
 			List<String> suggestions = service.findByTitleContainingIgnoreCase(title);
 			if(suggestions!=null && suggestions.size()>=1) {
-				return new ResponseEntity<>(service.findByTitleContainingIgnoreCase(title), HttpStatus.OK);
+				return new ResponseEntity<>(suggestions, HttpStatus.OK);
 			}
 
 			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
@@ -212,10 +212,30 @@ public class MobileController {
 
 	}
 
-	@GetMapping("/test")
-	public String test() {
+	@GetMapping("/comparison")
+	public ResponseEntity<List<MobileComparison>> getComparison(@RequestParam(required = false) Long mobileOne,
+			
+			@RequestParam(required = false) Long mobileTwo,
+			
+			@RequestParam(required = false) Long mobileThree
+			) { 
 		
-		return "Samsung Galaxy M12  6GB RAM   128GB";
+//		List<MobileComparison> comparison = service.getComparison(mobileOne, mobileTwo, mobileThree);
+//		if(comparison!=null && comparison.size()>=1) {
+//			return new ResponseEntity<>(comparison, HttpStatus.OK);
+//		}
+//		return null;
+		try {
+			
+			List<MobileComparison> comparison = service.getComparison(mobileOne, mobileTwo, mobileThree);
+			if(comparison!=null && comparison.size()>=1) {
+				return new ResponseEntity<>(comparison, HttpStatus.OK);
+			}
+
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
 	}
 
