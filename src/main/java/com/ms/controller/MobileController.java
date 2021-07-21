@@ -123,8 +123,7 @@ public class MobileController {
 			// Filter
 
 			// list of brands
-			@RequestParam(required = false) List<String> brand,
-			@RequestParam(required = false) Long priceLow,
+			@RequestParam(required = false) List<String> brand, @RequestParam(required = false) Long priceLow,
 			@RequestParam(required = false) Long priceHigh,
 
 			@RequestParam(required = false) List<String> launchedDate,
@@ -140,21 +139,20 @@ public class MobileController {
 			@RequestParam(required = false) List<String> screenSize,
 
 			@RequestParam(required = false) Integer rearCamera,
-			
+
 			@RequestParam(required = false) Integer frontCamera,
-			
-			//gte ram 2,4,6,8
+
+			// gte ram 2,4,6,8
 			@RequestParam(required = false) Integer ram,
-			
+
 			@RequestParam(required = false) Integer inbuiltMemory,
-			
+
 			@RequestParam(required = false) Integer battery,
 
 			// Android or iOS
 			@RequestParam(required = false) String os,
-			
-			
-			//cpu manf.
+
+			// cpu manf.
 //			Apple
 //			HiSilicon
 //			MediaTek
@@ -162,35 +160,39 @@ public class MobileController {
 //			Qualcomm
 //			Samsung
 			@RequestParam(required = false) List<String> cpu,
-			
-			//upcoming
-			//true false
+
+			// upcoming
+			// true false
 			@RequestParam(required = false) Boolean upcoming,
 
 			// paging--done
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size,
 
-			// sorting--done 
-			//date-> dateASC, dateDESC
-			//date-> priceASC, priceDESC
-			//date-> specScoreASC, specScoreDESC
-			
+			// sorting--done
+			// date-> dateASC, dateDESC
+			// date-> priceASC, priceDESC
+			// date-> specScoreASC, specScoreDESC
+
 			@RequestParam(defaultValue = "dateDESC") String sort
 
 	) {
-		
-		
+
 //		List<Mobile> mobileList = service.findMobileByProperties(search, brand, priceLow, priceHigh, launchedDate,
 //				screenSize, display, rearCamera, frontCamera, ram, inbuiltMemory, battery, os, cpu, upcoming, page, size, sort);
 //		return new ResponseEntity<>(mobileList, HttpStatus.OK);
-//
+
 		try {
 			List<Mobile> mobileList = service.findMobileByProperties(search, brand, priceLow, priceHigh, launchedDate,
-					screenSize, display, rearCamera, frontCamera, ram, inbuiltMemory, battery, os, cpu, upcoming, page, size, sort);
-	if(mobileList.size()>1)
+					screenSize, display, rearCamera, frontCamera, ram, inbuiltMemory, battery, os, cpu, upcoming, page,
+					size, sort);
+			System.out.print("Mobile list size" + mobileList.size());
+
+			if (mobileList.size() >= 1) {
 				return new ResponseEntity<>(mobileList, HttpStatus.OK);
-			return new ResponseEntity<>(mobileList, HttpStatus.NO_CONTENT);
-			
+			} else {
+				return new ResponseEntity<>(mobileList, HttpStatus.NO_CONTENT);
+			}
+
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -199,9 +201,9 @@ public class MobileController {
 	@GetMapping("/suggestion")
 	public ResponseEntity<List<String>> getSuggestion(@RequestParam String title) {
 		try {
-			
+
 			List<String> suggestions = service.findByTitleContainingIgnoreCase(title);
-			if(suggestions!=null && suggestions.size()>=1) {
+			if (suggestions != null && suggestions.size() >= 1) {
 				return new ResponseEntity<>(suggestions, HttpStatus.OK);
 			}
 
@@ -214,21 +216,20 @@ public class MobileController {
 
 	@GetMapping("/comparison")
 	public ResponseEntity<List<MobileComparison>> getComparison(@RequestParam(required = false) Long mobileOne,
-			
+
 			@RequestParam(required = false) Long mobileTwo,
-			
-			@RequestParam(required = false) Long mobileThree
-			) { 
-		
+
+			@RequestParam(required = false) Long mobileThree) {
+
 //		List<MobileComparison> comparison = service.getComparison(mobileOne, mobileTwo, mobileThree);
 //		if(comparison!=null && comparison.size()>=1) {
 //			return new ResponseEntity<>(comparison, HttpStatus.OK);
 //		}
 //		return null;
 		try {
-			
+
 			List<MobileComparison> comparison = service.getComparison(mobileOne, mobileTwo, mobileThree);
-			if(comparison!=null && comparison.size()>=1) {
+			if (comparison != null && comparison.size() >= 1) {
 				return new ResponseEntity<>(comparison, HttpStatus.OK);
 			}
 
